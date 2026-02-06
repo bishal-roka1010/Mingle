@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nita, Will You Be My Valentine? 💗</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #fbf6f2;
+      --ink: #2f2a28;
+      --muted: #7e6f6a;
+
+      --pink: #ff5a92;
+      --pink2:#ff86b6;
+
+      --cardBg:#fff8fb;
+      --paper:#ffffff;
+      --shadow: 0 18px 45px rgba(0,0,0,.12);
+      --shadowSoft: 0 12px 30px rgba(255,90,146,.20);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 50% -10%, #fff 0%, var(--bg) 55%, #f7efe9 120%);
+      color:var(--ink);
+      font-family: "Quicksand", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      overflow-x:hidden;
+    }
+
+    /* floating hearts */
+    .heart{
+      position:fixed;
+      width:18px;height:18px;
+      transform: rotate(45deg);
+      background: rgba(255,90,146,.20);
+      border-radius: 4px;
+      pointer-events:none;
+      animation: float 10s linear infinite;
+      opacity:.9;
+      z-index:0;
+    }
+    .heart::before, .heart::after{
+      content:"";
+      position:absolute;
+      width:18px;height:18px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before{ left:-9px; top:0; }
+    .heart::after{ top:-9px; left:0; }
+    @keyframes float{
+      from{ transform: translateY(40px) rotate(45deg); opacity:.12; }
+      18%{opacity:.85}
+      to{ transform: translateY(-120vh) rotate(45deg); opacity:0; }
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding: 32px 14px 56px;
+      gap: 14px;
+      position:relative;
+      z-index:1;
+    }
+
+    .top{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      width: min(920px, 100%);
+      text-align:center;
+    }
+
+    .paw{
+      width:104px;height:104px;
+      display:grid;
+      place-items:center;
+      opacity:.92;
+      transform: translateY(6px);
+    }
+    .paw svg{ width:100%; height:100%; }
+
+    .label{
+      background:#fff;
+      border: 3px solid #1f1f1f;
+      padding: 14px 22px;
+      border-radius: 2px;
+      box-shadow: 0 12px 22px rgba(0,0,0,.10);
+      transform: rotate(-1.0deg);
+      max-width: 100%;
+    }
+    .label h1{
+      margin:0;
+      font-family: "Pacifico", cursive;
+      font-weight:400;
+      font-size: clamp(24px, 4.4vw, 44px);
+      color: var(--pink);
+      line-height:1.15;
+      word-break: break-word;
+    }
+
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-weight:750;
+      font-size: 13.5px;
+      padding: 0 6px;
+    }
+
+    .btnRow{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top: 6px;
+      position:relative;
+      min-height: 92px;
+      justify-content:center;
+      width: min(560px, 100%);
+      padding: 0 6px;
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      transition: transform .14s ease, filter .14s ease, opacity .18s ease;
+      will-change: transform, opacity;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+
+    .yes{
+      padding: 18px 44px;
+      border-radius: 999px;
+      font-size: 22px;
+      color:#fff;
+      background: linear-gradient(180deg, var(--pink2), var(--pink));
+      box-shadow: 0 16px 0 rgba(255,90,146,.35), var(--shadowSoft);
+      letter-spacing: 1px;
+      transform: scale(1);
+    }
+    .yes.pulse{ animation: yesPulse .7s ease-in-out infinite; }
+    @keyframes yesPulse{
+      0%,100%{ transform: scale(var(--yesScale, 1)); }
+      50%{ transform: scale(calc(var(--yesScale, 1) + 0.05)); }
+    }
+
+    .no{
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      color:#6c615c;
+      background: #e9e2de;
+      box-shadow: 0 8px 0 rgba(0,0,0,.08);
+      position:relative;
+    }
+
+    .grid{
+      width: min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--cardBg);
+      border-radius: 16px;
+      border: 2px solid rgba(255,106,162,.35);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      position:relative;
+    }
+    .cardInner{
+      border: 2px solid rgba(255,106,162,.70);
+      border-radius: 14px;
+      padding: 18px 16px 14px;
+      position:relative;
+      background:
+        radial-gradient(circle, rgba(255,90,146,.12) 1px, transparent 1px);
+      background-size: 18px 18px;
+      overflow:hidden;
+    }
+
+    .seal{
+      position:absolute;
+      right:-14px;
+      top:-14px;
+      width:46px;height:46px;
+      border-radius:999px;
+      background: linear-gradient(180deg, var(--pink2), var(--pink));
+      box-shadow: 0 12px 26px rgba(255,90,146,.22);
+      display:grid;
+      place-items:center;
+      border: 4px solid #ffe9f2;
+    }
+    .seal svg{ width:22px; height:22px; fill:#fff; }
+
+    .title{
+      font-family:"Pacifico", cursive;
+      font-weight:400;
+      font-size: clamp(24px, 3.2vw, 36px);
+      color: var(--pink);
+      text-align:center;
+      margin: 4px 0 14px;
+    }
+
+    .list{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      color:#4a3f3b;
+      font-weight:750;
+      line-height:1.45;
+      font-size: 15px;
+    }
+    .check{
+      flex: 0 0 auto;
+      width:18px;height:18px;
+      border-radius:999px;
+      background: rgba(255,90,146,.18);
+      border: 2px solid rgba(255,90,146,.35);
+      display:grid;
+      place-items:center;
+      margin-top: 3px;
+    }
+    .check svg{ width:12px;height:12px; fill: var(--pink); }
+
+    .sign{
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 2px dashed rgba(255,90,146,.30);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      color:#8a7a74;
+      font-weight:750;
+      position:relative;
+      min-height: 170px;
+    }
+    .sigLine{
+      width: min(360px, 92%);
+      height: 44px;
+      border-bottom: 2px solid rgba(0,0,0,.18);
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      font-family:"Pacifico", cursive;
+      color: rgba(0,0,0,.35);
+      font-size: 22px;
+      padding-bottom: 6px;
+      transition: color .25s ease, transform .25s ease;
+    }
+    .sigLine.signed{
+      color: rgba(255,90,146,.95);
+      transform: translateY(-1px);
+    }
+    .note{
+      font-size: 12px;
+      color: rgba(126,111,106,.9);
+      text-align:center;
+      font-weight:750;
+      padding: 0 8px;
+    }
+
+    .bigStamp{
+      position:absolute;
+      right: 12px;
+      bottom: 60px;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      border: 4px dashed rgba(255,90,146,.65);
+      background: rgba(255,90,146,.08);
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+      opacity:0;
+      transform: rotate(-14deg) translateY(-30px) scale(.85);
+      filter: drop-shadow(0 14px 22px rgba(255,90,146,.18));
+    }
+    .bigStamp.show{
+      opacity:1;
+      animation: stampDrop .45s ease-out forwards;
+    }
+    @keyframes stampDrop{
+      0%{ transform: rotate(-14deg) translateY(-34px) scale(.85); }
+      70%{ transform: rotate(-14deg) translateY(8px) scale(1.02); }
+      100%{ transform: rotate(-14deg) translateY(0) scale(1); }
+    }
+    .bigStamp .inner{
+      width: 130px;
+      height: 130px;
+      border-radius: 999px;
+      border: 3px solid rgba(255,90,146,.55);
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:10px;
+      color: rgba(255,90,146,.95);
+      font-weight:1000;
+      line-height:1.05;
+      letter-spacing:.6px;
+    }
+    .bigStamp .inner span{
+      display:block;
+      font-family:"Pacifico", cursive;
+      font-weight:400;
+      letter-spacing:.2px;
+      font-size: 22px;
+      margin-top:4px;
+    }
+
+    .witness{
+      width: min(420px, 96%);
+      display:flex;
+      gap: 12px;
+      justify-content:space-between;
+      margin-top: 2px;
+      color:#7f6f6a;
+      font-weight:800;
+      font-size: 12.5px;
+      flex-wrap:wrap;
+      text-align:center;
+    }
+    .witness b{ color:#5a3b4a; }
+
+    /* timeline + secret + polaroids */
+    .timelineTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .chip{
+      background:#fff;
+      border:2px solid rgba(255,90,146,.35);
+      border-radius:999px;
+      padding:10px 12px;
+      box-shadow: 0 10px 20px rgba(255,90,146,.12);
+      font-weight:900;
+      color:#5a3b4a;
+      font-size:13px;
+    }
+    .timeline{ display:grid; gap:10px; }
+    .tRow{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      background: rgba(255,255,255,.82);
+      border: 2px solid rgba(255,90,146,.20);
+      border-radius: 14px;
+      padding: 12px 12px;
+    }
+    .tDot{
+      width:12px;height:12px;border-radius:999px;
+      background: linear-gradient(180deg, var(--pink2), var(--pink));
+      box-shadow: 0 0 0 6px rgba(255,90,146,.10);
+      margin-top: 4px;
+      flex:0 0 auto;
+    }
+    .tText{
+      color:#5b4b46;
+      font-weight:750;
+      line-height:1.45;
+      font-size:14.5px;
+    }
+    .tText b{ color:#3b2a28; }
+
+    .secretWrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .secretHint{
+      font-weight:900;
+      color:#6b4b5a;
+      font-size:13px;
+      text-align:center;
+    }
+    .secretHeart{
+      width: 86px;
+      height: 86px;
+      border-radius: 18px;
+      transform: rotate(45deg);
+      background: linear-gradient(180deg, rgba(255,134,182,.55), rgba(255,90,146,.55));
+      box-shadow: 0 18px 35px rgba(255,90,146,.22);
+      cursor:pointer;
+      position:relative;
+      border: 2px solid rgba(255,90,146,.35);
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .14s ease, filter .14s ease;
+    }
+    .secretHeart::before,.secretHeart::after{
+      content:"";
+      position:absolute;
+      width: 86px; height: 86px;
+      background: inherit;
+      border-radius: 999px;
+    }
+    .secretHeart::before{ left:-43px; top:0; }
+    .secretHeart::after{ top:-43px; left:0; }
+    .secretHeart:active{ transform: rotate(45deg) scale(.98); }
+
+    .secretMsg{
+      width: min(520px, 100%);
+      background: rgba(255,255,255,.92);
+      border: 2px solid rgba(255,90,146,.25);
+      border-radius: 14px;
+      padding: 12px 12px;
+      box-shadow: 0 12px 24px rgba(0,0,0,.08);
+      color:#5b4b46;
+      font-weight:750;
+      line-height:1.5;
+      font-size:14px;
+      display:none;
+      text-align:center;
+    }
+    .secretMsg.show{ display:block; }
+
+    .polaroids{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 520px){
+      .polaroids{ grid-template-columns: 1fr; }
+    }
+    .polaroid{
+      background: var(--paper);
+      border-radius: 14px;
+      padding: 12px 12px 16px;
+      box-shadow: 0 16px 30px rgba(0,0,0,.10);
+      border: 2px solid rgba(255,90,146,.18);
+      position:relative;
+      transform: rotate(var(--r, -2deg));
+      transition: transform .18s ease;
+    }
+    .photo{
+      width:100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px;
+      overflow:hidden;
+      background: linear-gradient(135deg, #fff, #ffe3ef);
+      border: 2px solid rgba(255,90,146,.18);
+      display:grid;
+      place-items:center;
+      position:relative;
+    }
+
+    /* ✅ show images properly */
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    /* placeholder on top until image loads */
+    .photo .ph{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      padding:10px;
+      text-align:center;
+      font-weight:900;
+      color:#7a3f5f;
+      font-size:13px;
+      line-height:1.3;
+      background: transparent;
+    }
+    .photo.loaded .ph{ display:none; }
+
+    .cap{
+      margin-top: 10px;
+      text-align:center;
+      font-weight:900;
+      color:#6b4b5a;
+      font-size:13px;
+    }
+
+    canvas#confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:65;
+    }
+    @media (max-width: 480px){
+      .paw{ width:88px;height:88px; }
+      .yes{ padding: 16px 34px; font-size:20px; }
+      .btnRow{ min-height: 86px; }
+      .item{ font-size:14.5px; }
+      .bigStamp{ width:145px;height:145px; right:10px; bottom: 66px; }
+      .bigStamp .inner{ width:116px;height:116px; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating hearts -->
+  <div class="heart" style="left:8%; top:85%; animation-duration: 11s;"></div>
+  <div class="heart" style="left:18%; top:92%; animation-duration: 9.5s;"></div>
+  <div class="heart" style="left:32%; top:88%; animation-duration: 12s;"></div>
+  <div class="heart" style="left:60%; top:92%; animation-duration: 10.5s;"></div>
+  <div class="heart" style="left:78%; top:90%; animation-duration: 11.5s;"></div>
+  <div class="heart" style="left:90%; top:88%; animation-duration: 9.2s;"></div>
+
+  <canvas id="confetti"></canvas>
+
+  <main class="wrap">
+    <section class="top">
+      <div class="paw" aria-hidden="true">
+        <svg viewBox="0 0 256 256">
+          <g fill="#2e2a28">
+            <circle cx="76" cy="70" r="24"/>
+            <circle cx="128" cy="52" r="26"/>
+            <circle cx="180" cy="70" r="24"/>
+            <circle cx="212" cy="110" r="22"/>
+            <path d="M70 206c-9-28 11-58 38-73 24-13 57-13 81 0 27 15 47 45 38 73-6 19-26 30-45 33-24 4-43-8-58-8s-34 12-58 8c-19-3-39-14-46-33z"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="label">
+        <h1>Will you be my Valentine, Nita?</h1>
+      </div>
+
+      <p class="sub">We met on <b>Nov 29, 2021</b> — and I still choose you 💗</p>
+
+      <div class="btnRow" id="btnRow">
+        <button class="btn yes" id="yesBtn">YES!</button>
+        <button class="btn no" id="noBtn">No</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- CONTRACT -->
+      <section class="card">
+        <div class="cardInner">
+          <div class="seal" title="Certified Cute">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.9 7.2 16.9l.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+            </svg>
+          </div>
+
+          <h2 class="title">Contract of Cuddles</h2>
+
+          <ul class="list">
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Mandatory forehead kisses on entry & exit (no exceptions).</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Unlimited snack sharing — even the good ones (yes, I’m serious).</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Hoodie theft rights granted permanently. You will look illegal cute 😌</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Random hugs may occur without warning. Resistance is… adorable 😏</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Movie nights include “sit closer” policy and occasional forehead boops.</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Kiss tax may be collected in small cute installments 😌💗</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              You get first priority for: blankets, playlists, and my attention.</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              If you’re sad, I’m legally required to cuddle you until you smile.</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              I will hype you up daily: “Nita is the prettiest, confirmed.” </li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Date nights must include at least one photo… for the memories </li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              In case of argument: we solve it with hugs + calm talks + snacks.</li>
+
+            <li class="item"><div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg></div>
+              Lifetime warranty: I choose you. Again and again. 💗</li>
+          </ul>
+
+          <div class="sign" id="signArea">
+            <div class="sigLine" id="sigLine">Your Signature Here</div>
+
+            <div class="witness">
+              <span>Witness: <b>Bishal</b> 😌</span>
+              <span>Status: <b>Officially Yours</b> 💞</span>
+            </div>
+
+            <div class="note">By clicking <b>YES!</b>, you agree to these adorable terms forever.</div>
+
+            <div class="bigStamp" id="bigStamp" aria-hidden="true">
+              <div class="inner">
+                APPROVED
+                <span>💗</span>
+                Valentine
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT SIDE -->
+      <section class="card">
+        <div class="cardInner">
+          <h2 class="title">Our Timeline</h2>
+
+          <div class="timelineTop">
+            <div class="chip">Met: <b>Nov 29, 2021</b></div>
+            <div class="chip">Together: <b id="daysTogether">—</b> days 💞</div>
+          </div>
+
+          <div class="timeline">
+            <div class="tRow"><div class="tDot"></div><div class="tText"><b>Nov 29, 2021</b> — the day my life got extra cute (you).</div></div>
+            <div class="tRow"><div class="tDot"></div><div class="tText"><b>Then…</b> laughs, memories, and “I miss you” messages.</div></div>
+            <div class="tRow"><div class="tDot"></div><div class="tText"><b>Today</b> — I’m officially asking: be my Valentine? 💗</div></div>
+          </div>
+
+          <div class="secretWrap">
+            <div class="secretHint">Click the heart to reveal a secret 💌😏</div>
+            <div class="secretHeart" id="secretHeart" role="button" aria-label="Reveal secret message"></div>
+            <div class="secretMsg" id="secretMsg">
+              Secret confession 😏💗<br/>
+              I want a Valentine date with you… and I want to <b>hold your hand the whole time</b>.<br/>
+              Also… you’re getting <b>extra hugs</b>. No refunds.
+            </div>
+          </div>
+
+          <h2 class="title" style="margin-top:14px;">Our Photos</h2>
+
+          <div class="polaroids">
+            <div class="polaroid" style="--r:-2deg">
+              <div class="photo" data-img="images/us1.jpeg">
+                <img id="p1" alt="Photo 1">
+                <div class="ph">Add Photo 1<br><small>images/us1.jpeg</small></div>
+              </div>
+              <div class="cap">Us being cute 💗</div>
+            </div>
+
+            <div class="polaroid" style="--r:2deg">
+              <div class="photo" data-img="images/us2.jpeg">
+                <img id="p2" alt="Photo 2">
+                <div class="ph">Add Photo 2<br><small>images/us2.jpeg</small></div>
+              </div>
+              <div class="cap">My favorite smile 😌</div>
+            </div>
+
+            <div class="polaroid" style="--r:-1.5deg">
+              <div class="photo" data-img="images/fun.jpeg">
+                <img id="p3" alt="Photo 3">
+                <div class="ph">Add Photo 3<br><small>images/fun.jpeg</small></div>
+              </div>
+              <div class="cap">The funny one 😂</div>
+            </div>
+
+            <div class="polaroid" style="--r:1.5deg">
+              <div class="photo" data-img="images/fav.jpeg">
+                <img id="p4" alt="Photo 4">
+                <div class="ph">Add Photo 4<br><small>images/fav.jpeg</small></div>
+              </div>
+              <div class="cap">Best memory ✨</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    // Days together
+    (function calcDays(){
+      const start = new Date(2021, 10, 29, 12, 0, 0); // Nov 29, 2021
+      const now = new Date();
+      const todayNoon = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
+      const days = Math.max(0, Math.floor((todayNoon - start) / (1000*60*60*24)));
+      document.getElementById("daysTogether").textContent = days.toLocaleString();
+    })();
+
+    // ✅ Load polaroid images safely (show placeholder if missing)
+    (function loadPolaroids(){
+      const photoBoxes = document.querySelectorAll(".photo[data-img]");
+      photoBoxes.forEach((box) => {
+        const img = box.querySelector("img");
+        const src = box.getAttribute("data-img");
+
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        img.onload = () => box.classList.add("loaded");
+        img.onerror = () => {
+          box.classList.remove("loaded"); // keep placeholder
+          console.warn("Image not found:", src);
+        };
+
+        img.src = src; // set real path here
+      });
+    })();
+
+    // Secret reveal
+    const secretHeart = document.getElementById("secretHeart");
+    const secretMsg = document.getElementById("secretMsg");
+    let secretOpen = false;
+    secretHeart.addEventListener("click", () => {
+      secretOpen = !secretOpen;
+      secretMsg.classList.toggle("show", secretOpen);
+    });
+
+    // NO logic
+    const noMax = Math.floor(Math.random() * 3) + 5; // 5–7
+    let noCount = 0;
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const row = document.getElementById("btnRow");
+    const sigLine = document.getElementById("sigLine");
+    const bigStamp = document.getElementById("bigStamp");
+    const signArea = document.getElementById("signArea");
+    let yesScale = 1;
+
+    function moveNo(){
+      const rect = row.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+      const pad = 6;
+      const x = Math.max(pad, Math.random() * (rect.width - b.width - pad));
+      const y = Math.max(pad, Math.random() * (rect.height - b.height - pad));
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+    function enlargeYes(){
+      yesScale = Math.min(yesScale + 0.12, 1.75);
+      yesBtn.style.setProperty("--yesScale", yesScale);
+      yesBtn.classList.add("pulse");
+    }
+    function vanishNoSilently(){
+      noBtn.style.opacity = "0";
+      noBtn.style.pointerEvents = "none";
+      setTimeout(()=>{ noBtn.style.display="none"; }, 200);
+    }
+    noBtn.addEventListener("mouseenter", moveNo);
+    noBtn.addEventListener("click", () => {
+      noCount++;
+      enlargeYes();
+      moveNo();
+      if(noCount >= noMax) vanishNoSilently();
+    });
+
+    // Confetti
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let W, H, pieces = [], on = false;
+    function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+    addEventListener("resize", resize); resize();
+    const rand=(a,b)=>Math.random()*(b-a)+a;
+    function make(){
+      pieces = Array.from({length: 240}, () => ({
+        x: rand(0,W), y: rand(-H,0), s: rand(3,6),
+        vx: rand(-2.2,2.2), vy: rand(2.2,6.2),
+        r: rand(0,Math.PI), vr: rand(-0.25,0.25),
+        c: `hsl(${Math.floor(rand(320,360))} 90% 70%)`, a: rand(.75,1)
+      }));
+    }
+    function step(){
+      for(const p of pieces){
+        p.x+=p.vx; p.y+=p.vy; p.r+=p.vr;
+        if(p.x<-20) p.x=W+20;
+        if(p.x>W+20) p.x=-20;
+        if(p.y>H+40){ p.y=rand(-80,-10); p.x=rand(0,W); }
+      }
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(const p of pieces){
+        ctx.save();
+        ctx.globalAlpha=p.a;
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.r);
+        ctx.fillStyle=p.c;
+        ctx.fillRect(-p.s,-p.s,p.s*2,p.s*2);
+        ctx.restore();
+      }
+    }
+    function loop(){
+      if(!on) return;
+      step(); draw(); requestAnimationFrame(loop);
+    }
+    function confetti(){
+      on=true; make(); loop();
+      setTimeout(()=>{ on=false; ctx.clearRect(0,0,W,H); }, 4200);
+    }
+
+    // THUNK sound
+    let audioCtx=null;
+    function thunk(){
+      try{
+        audioCtx = audioCtx || new (AudioContext || webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type="sine";
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(70, now+0.08);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.34, now+0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now+0.12);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+
+        const noiseBuf = audioCtx.createBuffer(1, audioCtx.sampleRate*0.03, audioCtx.sampleRate);
+        const data = noiseBuf.getChannelData(0);
+        for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = noiseBuf;
+        const nGain = audioCtx.createGain();
+        nGain.gain.setValueAtTime(0.22, now);
+        nGain.gain.exponentialRampToValueAtTime(0.0001, now+0.03);
+        noise.connect(nGain); nGain.connect(audioCtx.destination);
+
+        osc.start(now); osc.stop(now+0.13);
+        noise.start(now); noise.stop(now+0.04);
+      }catch(e){}
+    }
+
+    // YES action
+    yesBtn.addEventListener("click", () => {
+      confetti();
+
+      yesBtn.textContent="YES";
+      yesBtn.disabled=true;
+
+      yesScale = Math.max(yesScale, 1.28);
+      yesBtn.style.setProperty("--yesScale", yesScale);
+      yesBtn.style.transform = `scale(${yesScale})`;
+
+      if(noBtn.style.display !== "none") vanishNoSilently();
+
+      sigLine.textContent="Nita";
+      sigLine.classList.add("signed");
+
+      bigStamp.classList.add("show");
+      thunk();
+
+      if (innerWidth < 700){
+        setTimeout(()=> signArea.scrollIntoView({behavior:"smooth", block:"center"}), 250);
+      }
+    });
+  </script>
+</body>
+</html>
